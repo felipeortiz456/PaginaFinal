@@ -1,11 +1,24 @@
+<!-- lista_pedidos.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lista de Pedidos</title>
 </head>
 <body>
-    <h2>Galeria</h2>
+    <h1>Lista de Pedidos</h1>
+    <ul>
+        {% for pedido in pedidos %}
+            <li>
+                <strong>Fecha del Pedido:</strong> {{ pedido.fecha_pedido }}<br>
+                <strong>Dirección de Entrega:</strong> {{ pedido.direccion_entrega }}<br>
+                <strong>Productos:</strong>
+                <ul>
+                    {% for producto in pedido.productos.all %}
+                        <li>{{ producto.nombre }} - Precio: ${{ producto.precio }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
