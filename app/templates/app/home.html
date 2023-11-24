@@ -2,6 +2,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- En el head de tu plantilla -->
+    {% load pwa %}
+
+    <!-- Agrega el manifest -->
+    {% render_pwa_meta %}
+
+    <!-- Registra el service worker -->
+    {% render_pwa_sw %}
+
+    <!-- Agrega esto si deseas que la aplicación se ejecute a pantalla completa en dispositivos móviles -->
+    {% render_pwa_meta "fullscreen" %}
+
     <title>Lista de Productos</title>
 </head>
 <body>

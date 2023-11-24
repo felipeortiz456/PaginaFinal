@@ -34,6 +34,11 @@ ALLOWED_HOSTS = []
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+PWA_APP_NAME = 'TuAppName'
+PWA_SHORT_NAME = 'ShortName'
+PWA_THEME_COLOR = '#000000'
+PWA_BACKGROUND_COLOR = '#ffffff'
+
 
 
 # Application definition
@@ -46,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'pwa',
 ]
 
 
