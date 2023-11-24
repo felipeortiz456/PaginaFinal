@@ -22,7 +22,7 @@
                     {% csrf_token %}
                     <select name="nuevo_estado">
                         {% for choice in pedido.ESTADOS_PEDIDO %}
-                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                        <option value="{{ choice.0 }}" {% if choice.0 == pedido.estado %}selected{% endif %}>{{ choice.1 }}</option>
                         {% endfor %}
                     </select>
                     <button type="submit">Cambiar Estado</button>
