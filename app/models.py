@@ -15,6 +15,7 @@ class Producto(models.Model):
     stock = models.IntegerField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to="productos", null=True)
     
 
     def __str__(self):
