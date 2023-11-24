@@ -22,13 +22,19 @@ class Producto(models.Model):
 
 
 class Pedido(models.Model):
+    ESTADOS_PEDIDO = [
+        ('en_proceso', 'En proceso'),
+        ('enviado', 'Enviado'),
+        ('entregado', 'Entregado'),
+    ]
     productos = models.ManyToManyField(Producto)
     fecha_pedido = models.DateTimeField(auto_now_add=True)
     direccion_entrega = models.CharField(max_length=255)
+    estado = models.CharField(max_length=20, choices=ESTADOS_PEDIDO, default='en_proceso')
     # Agrega otros campos relacionados con el pedido según tus necesidades
 
     def __str__(self):
-        return f"Pedido #{self.id}"
+        return f"Pedido #{self.id} - {self.estado}"
 
 
 # Create your models here.
