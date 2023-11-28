@@ -11,11 +11,25 @@ class Categoria(models.Model):
 class Producto(models.Model):
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()
-    precio = models.DecimalField(max_digits=5, decimal_places=2)
+    precio = models.DecimalField(max_digits=6, decimal_places=3)
     stock = models.IntegerField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to="productos", null=True)
+
+    SIMPLE = 'Simple'
+    DOBLE = 'Doble'
+    OPCIONES_HAMBURGUESA = [
+        (SIMPLE, 'Hamburguesa Simple'),
+        (DOBLE, 'Hamburguesa Doble'),
+    ]
+
+    # Agregar el campo de elección
+    tipo_hamburguesa = models.CharField(
+        max_length=10,
+        choices=OPCIONES_HAMBURGUESA,
+        default=SIMPLE,
+    )
     
 
     def __str__(self):
