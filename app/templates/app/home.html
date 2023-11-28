@@ -1,15 +1,45 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Página de Inicio{% endblock %}
+
+{% block content %}
+    <!-- Contenido específico de la página de inicio -->
+    <div class="container">
+        <div class="row">
+          {% for producto in productos %}
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="card">
+                <img src="{{ producto.imagen.url }}" class="card-img-top custom-image" alt="{{ producto.nombre }}">
+                <div class="card-body">
+                  <h5 class="card-title">{{ producto.nombre }}</h5>
+                  <p class="card-text">{{ producto.descripcion }}</p>
+                  <p class="card-text">{{ producto.precio }}</p>
+                  <a href="#" class="btn btn-primary">Ver más</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+{% endblock %}
+
+
 <!-- lista_productos.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Productos</title>
-</head>
-<body>
-    <h1>Lista de Productos</h1>
-    <ul>
-        {% for producto in productos %}
-            <li>{{ producto.nombre }} - Precio: ${{ producto.precio }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+
+
+  <style>
+    .custom-image {
+      width: 100%; /* Puedes ajustar este valor según tus necesidades */
+      height: auto;
+    }
+  </style>
+  
+  
+  
+  
+  
+  
+  {% comment %} <li>{{ producto.nombre }} - Precio: ${{ producto.precio }}</li> {% endcomment %}
+  
+
