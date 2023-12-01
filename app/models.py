@@ -16,6 +16,9 @@ class Producto(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to="productos", null=True)
+    cantidad = models.IntegerField(default=0)
+    comentario = models.CharField(max_length=100,default="")
+
 
     SIMPLE = 'Simple'
     DOBLE = 'Doble'

@@ -14,14 +14,52 @@
                   <h5 class="card-title">{{ producto.nombre }}</h5>
                   <p class="card-text">{{ producto.descripcion }}</p>
                   <p class="card-text">{{ producto.precio }}</p>
-                  <p class="card-text">Tipo de hamburguesa: {{ producto.tipo_hamburguesa }}</p>
-                  <a href="#" class="btn btn-primary">Ver más</a>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
+                  <!--<form method="post" action="">
+                    {% csrf_token %}
+                    <select name="nuevo_estado">
+                        {% for choice in producto.tipo_hamburguesa %}
+                        <option value="{{ choice }}">{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Cambiar Estado</button>
+                  </form>
+                  <p class="card-text">Tipo de hamburguesa: {{ producto.tipo_hamburguesa }}</p>-->
+                  <!-- Botón para abrir la ventana modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+  Abrir Ventana Modal
+</button>
+
+<!-- Ventana modal -->
+
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Título de la Ventana Modal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+              <h2>Agregar Nuevo Producto</h2>
+        <form method="post" action="{% url 'home' %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+
+          <button type="submit">Guardar Producto</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 

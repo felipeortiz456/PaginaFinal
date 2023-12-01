@@ -2,17 +2,27 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 # Create your views here.
 from .models import Producto,Pedido
+from .forms import ProductoForm
+
 
 def home(request):
     # Obtén todos los productos desde la base de datos
     productos = Producto.objects.all()
 
-    # Pasa la lista de productos al contexto de la plantilla
-    context = {'productos': productos}
+    # Manejar el formulario si se envía
+    if request.method == 'POST':
+        form = ProductoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Redirige a la misma página después de agregar un producto
+    else:
+        form = ProductoForm()
+
+    # Pasa la lista de productos y el formulario al contexto de la plantilla
+    context = {'productos': productos, 'form': form}
 
     # Renderiza la plantilla y pasa el contexto
     return render(request, 'app/home.html', context)
-
 
 
 def contacto(request):
