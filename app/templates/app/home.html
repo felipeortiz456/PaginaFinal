@@ -25,9 +25,9 @@
                   </form>
                   <p class="card-text">Tipo de hamburguesa: {{ producto.tipo_hamburguesa }}</p>-->
                   <!-- Botón para abrir la ventana modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-  Abrir Ventana Modal
-</button>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+  Agregar Pedido
+  </button>
 
 <!-- Ventana modal -->
 
@@ -60,6 +60,19 @@
     </div>
   </div>
 </div>
+
+<form method="get" action="{% url 'listar_productos' %}">
+  <label for="categoria">Filtrar por categoría:</label>
+  <select name="categoria_id" id="categoria">
+      <option value="">Todas las categorías</option>
+      {% for categoria in categorias %}
+          <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+      {% endfor %}
+  </select>
+  <button type="submit">Filtrar</button>
+</form>
+
+
 
 {% endblock %}
 

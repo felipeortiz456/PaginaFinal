@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, contacto, galeria,cambiar_estado_pedido
+from .views import home, contacto, galeria,cambiar_estado_pedido,listar_productos
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -10,5 +10,6 @@ urlpatterns = [
     path('galeria/', galeria, name="galeria"),
     path('pedidos/', galeria, name='lista_pedidos'),
     path('cambiar_estado/<int:pedido_id>/', cambiar_estado_pedido, name='cambiar_estado_pedido'),
+    path('listar_productos/', listar_productos, name='listar_productos'),
 
 ]

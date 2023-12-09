@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 # Create your views here.
-from .models import Producto,Pedido
+from .models import Producto,Pedido,Categoria
 from .forms import ProductoForm
 
 
@@ -45,3 +45,15 @@ def cambiar_estado_pedido(request, pedido_id):
         messages.success(request, f"Estado del Pedido #{pedido.id} cambiado a {nuevo_estado}.")
         return redirect('lista_pedidos')
     return render(request, 'app/galeria.html')
+
+
+def listar_productos(request):
+    categorias = Categoria.objects.all()  # Asegúrate de importar la clase Categoria
+
+    if 'categoria_id' in request.GET:
+        categoria_id = request.GET['categoria_id']
+        productos = Producto.objects.filter(categoria__id=categoria_id)
+    else:
+        productos = Producto.objects.all()
+
+    return render(request, 'listar_productos.html', {'productos': productos, 'categorias': categorias})
