@@ -34,6 +34,7 @@ def galeria(request):
     pedidos = Pedido.objects.all ()
     context = { 'pedidos': pedidos}
     return render(request,'app/galeria.html', context)
+    return render(request,'app/contacto.html', context)
 
 #Cambiar estado.
 def cambiar_estado_pedido(request, pedido_id):
@@ -45,6 +46,7 @@ def cambiar_estado_pedido(request, pedido_id):
         messages.success(request, f"Estado del Pedido #{pedido.id} cambiado a {nuevo_estado}.")
         return redirect('lista_pedidos')
     return render(request, 'app/galeria.html')
+    return render(request, 'app/contacto.html')
 
 
 def listar_productos(request):
