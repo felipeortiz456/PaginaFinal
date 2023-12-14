@@ -27,15 +27,15 @@ def home(request):
     return render(request, 'app/home.html', context)
 
 
-def contacto(request):
-    return render(request, 'app/contacto.html')
+def promociones(request):
+    return render(request, 'app/promociones.html')
 
-def galeria(request):
+def pedido(request):
 
 
     pedidos = Pedido.objects.all ()
     context = { 'pedidos': pedidos}
-    return render(request,'app/galeria.html', context)
+    return render(request,'app/pedido.html', context)
     
 
 #Cambiar estado.
@@ -47,8 +47,7 @@ def cambiar_estado_pedido(request, pedido_id):
         pedido.save()
         messages.success(request, f"Estado del Pedido #{pedido.id} cambiado a {nuevo_estado}.")
         return redirect('lista_pedidos')
-    #return render(request, 'app/galeria.html')
-    return render(request, 'app/contacto.html')
+    return render(request, 'app/pedido.html')
 
 
 def listar_productos(request,categoria_id=None):
