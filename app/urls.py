@@ -10,6 +10,6 @@ urlpatterns = [
     path('galeria/', galeria, name="galeria"),
     path('pedidos/', galeria, name='lista_pedidos'),
     path('cambiar_estado/<int:pedido_id>/', cambiar_estado_pedido, name='cambiar_estado_pedido'),
-    path('listar_productos/', listar_productos, name='listar_productos'),
+    path('listar_productos', listar_productos, name='listar_productos'),
 
 ]
