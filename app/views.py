@@ -33,7 +33,8 @@ def promociones(request):
 def pedido(request):
 
 
-    pedidos = Pedido.objects.all ()
+    
+    pedidos = Pedido.objects.filter (estado = 'en_proceso')
     context = { 'pedidos': pedidos}
     return render(request,'app/pedido.html', context)
     
