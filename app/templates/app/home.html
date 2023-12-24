@@ -1,9 +1,25 @@
 {% extends 'app/base.html' %}
-
 {% block title %}Página de Inicio{% endblock %}
 
 {% block content %}
     <!-- Contenido específico de la página de inicio -->
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <form class="mb-3" method="get" action="{% url 'listar_productos' %}">
+            <div class="input-group">
+              <select class="form-select" name="categoria_id" id="categoria">
+                {% for categoria in categorias %}
+                  <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                {% endfor %}
+              </select>
+              <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
     <div class="container">
         <div class="row">
           {% for producto in productos %}
@@ -14,22 +30,13 @@
                   <h5 class="card-title">{{ producto.nombre }}</h5>
                   <p class="card-text">{{ producto.descripcion }}</p>
                   <p class="card-text">{{ producto.precio }}</p>
-                  <!--<form method="post" action="">
-                    {% csrf_token %}
-                    <select name="nuevo_estado">
-                        {% for choice in producto.tipo_hamburguesa %}
-                        <option value="{{ choice }}">{{ choice }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit">Cambiar Estado</button>
-                  </form>
-                  <p class="card-text">Tipo de hamburguesa: {{ producto.tipo_hamburguesa }}</p>-->
-                  <!-- Botón para abrir la ventana modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-  Agregar Pedido
-  </button>
 
-<!-- Ventana modal -->
+                  <!-- Botón para abrir la ventana modal -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+    Agregar Pedido
+      </button>
+
+  <!-- Ventana modal -->
 
 </div>
 </div>
@@ -41,7 +48,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Título de la Ventana Modal</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Agregar Producto al Carro</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -61,15 +68,6 @@
   </div>
 </div>
 
-<form method="get" action="{% url 'listar_productos' %}">
-  <label for="categoria">Filtrar por categoría:</label>
-  <select name="categoria_id" id="categoria">
-      {% for categoria in categorias %}
-          <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
-      {% endfor %}
-  </select>
-  <button type="submit">Filtrar</button>
-</form>
 
 {% endblock %}
 

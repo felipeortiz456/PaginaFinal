@@ -2,9 +2,12 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-ZwE5IEoUJQd5EEbM9zq0kxBn5P5Un6z1ciO+uqnUuHQXwZRop3l+HNGNDzoS07tx" crossorigin="anonymous">
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-custom">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home' %}">Homies</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +21,7 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'promociones' %}">Promociones</a>
           </li>
-          
+  
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Menu
@@ -29,15 +32,33 @@
               <li><a class="dropdown-item" href="#">Papas y otros</a></li>
             </ul>
           </li>
-          
+  
         </ul>
-        <form class="d-flex">
+        {% comment %} <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
+        </form> {% endcomment %}
+        <form class="d-flex">
+          <!-- Reemplaza el campo de búsqueda con el icono del carrito de compras -->
+          <a href="#" class="btn btn-outline-success">
+            <i class="fas fa-shopping-cart"></i> <!-- Icono del carrito de compras de Font Awesome -->
+          </a>
         </form>
+        
+
+
       </div>
     </div>
   </nav>
+  
+
+
+
+
+
+
+
+
 
 
 
