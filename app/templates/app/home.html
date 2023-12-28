@@ -2,47 +2,141 @@
 {% block title %}Página de Inicio{% endblock %}
 
 {% block content %}
-    <!-- Contenido específico de la página de inicio -->
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <form class="mb-3" method="get" action="{% url 'listar_productos' %}">
-            <div class="input-group">
-              <select class="form-select" name="categoria_id" id="categoria">
-                {% for categoria in categorias %}
-                  <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
-                {% endfor %}
-              </select>
-              <button type="submit" class="btn btn-primary">Filtrar</button>
-            </div>
-          </form>
+<script type="text/javascript">
+  let productos = []
+  function Agregar(id, nombre, precio) {
+    precio2 = Number(precio);
+
+    const producto = {
+      "id": id,
+      "nombre": nombre,
+      "precio": precio2,
+    }
+    productos.push(producto);
+  }
+
+  function calcularTotal() {
+    let total = 0;
+    productos.forEach(producto => {
+      total += producto.precio;
+    });
+    return total;
+  }
+
+  function consoletest() {
+    const carrito = {
+      "id": 1,
+      "nombre": 'carrito',
+      "productos": productos,
+      "total": calcularTotal(),
+    }
+    console.log(carrito)
+  }
+
+  function openModal() {
+    const carrito = {
+      "id": 1,
+      "nombre": 'carrito',
+      "productos": productos,
+      "total": calcularTotal(),
+    };
+
+    const modalContent = document.getElementById('modalContent');
+
+    let htmlContent = `
+    <p>ID: ${carrito.id}</p>
+    <p>Nombre: ${carrito.nombre}</p>
+    <p>Productos:</p>
+    <ul>
+  `;
+
+    carrito.productos.forEach(producto => {
+      htmlContent += `
+      <li>
+        <p>ID: ${producto.id}</p>
+        <p>Nombre: ${producto.nombre}</p>
+        <p>Precio: ${producto.precio}</p>
+      </li>
+    `;
+    });
+
+    htmlContent += `</ul>
+    <p>Total: ${carrito.total}</p>
+  `;
+
+    modalContent.innerHTML = htmlContent;
+
+    const modal = document.getElementById('myModal');
+    modal.style.display = 'block';
+  }
+
+
+  // Function to close the modal
+  function closeModal() {
+    const modal = document.getElementById('myModal');
+    modal.style.display = 'none';
+  }
+
+  // Event listener for the button to open the modal
+  const openModalBtn = document.getElementById('openModalBtn');
+  openModalBtn.addEventListener('click', openModal);
+</script>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- Contenido específico de la página de inicio -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form class="mb-3" method="get" action="{% url 'listar_productos' %}">
+        <div class="input-group">
+          <select class="form-select" name="categoria_id" id="categoria">
+            {% for categoria in categorias %}
+            <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<button onclick="openModal()">Agregar</button>
+<!-- <button id="openModalBtn">Open Modal</button> -->
+</button>
+
+<div class="container">
+  <div class="row">
+
+    {% for producto in productos %}
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <div class="card">
+        <img src="{{ producto.imagen.url }}" class="card-img-top custom-image" alt="{{ producto.nombre }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ producto.nombre }}</h5>
+          <p class="card-text">{{ producto.descripcion }}</p>
+          <p class="card-text">{{ producto.precio }}</p>
+
+          <!-- Botón para abrir la ventana modal -->
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+            Agregar Pedido
+            <button
+              onclick="Agregar('{{ producto.id }}','{{ producto.nombre }}','{{ producto.precio }}')">Agregar</button>
+          </button>
+
+          <!-- Ventana modal -->
+
         </div>
       </div>
     </div>
-    
-    <div class="container">
-        <div class="row">
-          {% for producto in productos %}
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-              <div class="card">
-                <img src="{{ producto.imagen.url }}" class="card-img-top custom-image" alt="{{ producto.nombre }}">
-                <div class="card-body">
-                  <h5 class="card-title">{{ producto.nombre }}</h5>
-                  <p class="card-text">{{ producto.descripcion }}</p>
-                  <p class="card-text">{{ producto.precio }}</p>
-
-                  <!-- Botón para abrir la ventana modal -->
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-    Agregar Pedido
-      </button>
-
-  <!-- Ventana modal -->
-
-</div>
-</div>
-</div>
-{% endfor %}
-</div>
+    {% endfor %}
+  </div>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -52,7 +146,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-              <h2>Agregar Nuevo Producto</h2>
+        <h2>Agregar Nuevo Producto</h2>
         <form method="post" action="{% url 'home' %}">
           {% csrf_token %}
           {{ form.as_p }}
@@ -70,18 +164,3 @@
 
 
 {% endblock %}
-
-
-<!-- lista_productos.html -->
-
-
-
-  
-  
-  
-  
-  
-  
-  {% comment %} <li>{{ producto.nombre }} - Precio: ${{ producto.precio }}</li> {% endcomment %}
-  
-
