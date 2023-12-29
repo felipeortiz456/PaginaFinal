@@ -78,7 +78,7 @@ class Pedido(models.Model):
     direccion_entrega = models.CharField(max_length=255)
     estado = models.CharField(max_length=20, choices=ESTADOS_PEDIDO, default='en_proceso')
     imagen = models.ImageField(upload_to="pedidos", null=True)
-    nombre_cliente = models.CharField(max_length=36, null=True, blank=True)
+    nombre_cliente = models.CharField(max_length=36 ,null=True)
 
     # Agrega otros campos relacionados con el pedido según tus necesidades
 

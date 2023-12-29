@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
+from rest_framework import generics
+from .serializers import PedidoSerializer
 # Create your views here.
 from .models import Producto,Pedido,Categoria
 from .forms import ProductoForm
@@ -29,6 +31,10 @@ def home(request):
 
 def promociones(request):
     return render(request, 'app/promociones.html')
+
+class PedidoListCreateView(generics.ListCreateAPIView):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
 
 def pedido(request):
 

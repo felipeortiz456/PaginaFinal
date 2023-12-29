@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'colorfield',
     'bootstrap5',
+    'rest_framework',
+    'corsheaders',
 ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -63,10 +65,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'tecnomarket.urls'
-
+CORS_ALLOW_ALL_ORIGINS = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

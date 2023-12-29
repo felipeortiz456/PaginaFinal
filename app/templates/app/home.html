@@ -4,12 +4,95 @@
 {% block content %}
 <script type="text/javascript">
   let productos = []
+  let productId = []
+  let carrito = {
+    "id": 1,
+    "nombre": 'carrito',
+    "productos": productos,
+    "total": calcularTotal(),
+  };
   let contador = 0;
+  function agregarPedido() {
+    // Datos del pedido que deseas enviar
+    const nombreCliente = document.getElementById('nombreCliente').value;
+    const direccionEntrega = document.getElementById('direccionEntrega').value;
+
+    productId = productos.map(productos => productos.id);
+    console.log(productId)
+    const pedidoData = {
+      direccion_entrega: direccionEntrega,
+      estado: "en_proceso",
+      nombre_cliente: nombreCliente,
+      productos: productId,
+    };
+    productos = [];
+    carrito = {
+      "id": 1,
+      "nombre": 'carrito',
+      "productos": productos,
+      "total": 0,
+    };
+    // URL de tu API para crear pedidos
+    const apiUrl = 'http://localhost:8000/addpedidos/';
+
+    // Configuración de la solicitud
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Puedes incluir otros encabezados según sea necesario
+      },
+      body: JSON.stringify(pedidoData),
+    };
+
+    // Realizar la solicitud POST
+    fetch(apiUrl, requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al crear el pedido');
+        }
+        return response.json();
+      })
+      .then(resultado => {
+        closeModal()
+        reiniciarContador()
+
+        Swal.fire({
+          title: 'Pedido Confirmado Correctamente',
+          text: 'Su producto se agregado correctamente al carrito',
+          icon: 'success',
+          timer: 4000, // tiempo en milisegundos
+          showConfirmButton: false // oculta el botón de confirmación
+        });
+        console.log('Pedido creado exitosamente:', resultado);
+      })
+      .catch(error => {
+        console.error('Error al enviar la solicitud:', error.message);
+      });
+
+  }
   function incrementarContador() {
     let contadorContainer = document.getElementById('contadorContainer');
     contador++;
     htmlContent = `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
       ${contador}
+      <span class="visually-hidden">mensajes no leídos</span>`;
+    contadorContainer.innerHTML = htmlContent;
+  }
+  function disminuirContador() {
+    let contadorContainer = document.getElementById('contadorContainer');
+    contador--;
+    htmlContent = `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      ${contador}
+      <span class="visually-hidden">mensajes no leídos</span>`;
+    contadorContainer.innerHTML = htmlContent;
+  }
+  function reiniciarContador() {
+    let contadorContainer = document.getElementById('contadorContainer');
+    contador = 0;
+    htmlContent = `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      ${contador}
+
       <span class="visually-hidden">mensajes no leídos</span>`;
     contadorContainer.innerHTML = htmlContent;
   }
@@ -25,6 +108,12 @@
 
     }
     productos.push(producto);
+    carrito = {
+      "id": 1,
+      "nombre": 'carrito',
+      "productos": productos,
+      "total": calcularTotal(),
+    };
     Swal.fire({
       title: 'Producto Agregado Correctamente',
       text: 'Su producto se agregado correctamente al carrito',
@@ -33,6 +122,49 @@
       showConfirmButton: false // oculta el botón de confirmación
     });
   }
+  function quitarProducto(posicion) {
+    if (posicion >= 0 && posicion < productos.length) {
+      productos.splice(posicion, 1);
+      carrito = {
+        "id": 1,
+        "nombre": 'carrito',
+        "productos": productos,
+        "total": calcularTotal(),
+      };
+      console.log(productos);
+      Swal.fire({
+        title: 'Producto Eliminado Correctamente',
+        text: 'Su producto se ha eliminado correctamente del carrito',
+        icon: 'warning',
+        timer: 1500,
+        showConfirmButton: false
+      });
+      disminuirContador();
+    } else {
+      console.error("Posición de producto no válida");
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo eliminar el producto. Posición no válida.',
+        icon: 'error',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+    openModal()
+  }
+
+  // function quitarProducto(id) {
+  //   // Filtrar los productos para excluir el que tiene el ID proporcionado
+  //   filter = productos.filter(producto => producto.id !== id);
+  //   console.log(filter);
+  //   Swal.fire({
+  //     title: 'Producto Eliminado Correctamente',
+  //     text: 'Su producto se ha eliminado correctamente del carrito',
+  //     icon: 'success',
+  //     timer: 1500,
+  //     showConfirmButton: false
+  //   });
+  // }
 
   function calcularTotal() {
     let total = 0;
@@ -41,24 +173,8 @@
     });
     return total;
   }
-
-  function consoletest() {
-    const carrito = {
-      "id": 1,
-      "nombre": 'carrito',
-      "productos": productos,
-      "total": calcularTotal(),
-    }
-    console.log(carrito)
-  }
-
   function openModal() {
-    const carrito = {
-      "id": 1,
-      "nombre": 'carrito',
-      "productos": productos,
-      "total": calcularTotal(),
-    };
+
 
     const modalContent = document.getElementById('modalContent');
 
@@ -67,16 +183,33 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Detalles del Carrito</h5>
-          <button type="button" class="btn" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
-</svg>
+          <div class="">
+            <button type="button" class="btn" data-dismiss="modal" aria-label="Close" onclick="closeModal()" s>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                </svg>
+                </div>
           </button>
         </div>
-        <h2>Total: ${carrito.total}</h2>
-        <div class="px-60">
-          <button class="btn btn-primary "onclick="">Confirmar pedido</button>
-          </div>
+        <div class="">
+
+          <div class="container">
+  <div class="row">
+    <!-- Columna para los inputs (2/3) -->
+    <div class="col-md-8">
+      <label for="nombreCliente">Nombre Cliente</label>
+      <input type="text" id="nombreCliente" class="form-control">
+      
+      <label for="direccionEntrega">Dirección de Entrega</label>
+      <input type="text" id="direccionEntrega" class="form-control">
+    </div>
+    
+    <!-- Columna para el botón (1/3) -->
+    <div class="col-md-4">
+      <button class="btn btn-primary" onclick="agregarPedido()">Confirmar pedido</button>
+    </div>
+  </div>
+</div>
 
         <div class="modal-body">
           <p>Productos:</p>
@@ -84,17 +217,24 @@
   `;
 
 
-    carrito.productos.forEach(producto => {
+    carrito.productos.forEach((producto, index) => {
       htmlContent += `
       <div class="row">
-    <div class="col-3">
-        <img src="${producto.img}" class="img-thumbnail" alt="${producto.nombre}">
-    </div>
-    <div class="col-9">
-        <h5>Nombre: ${producto.nombre}</h5>
-        <h5>Precio: ${producto.precio}</h5>
-    </div>
+  <div class="col-3">
+    <img src="${producto.img}" class="img-thumbnail" alt="${producto.nombre}">
+  </div>
+  <div class="col-9">
+    <h5>Nombre: ${producto.nombre}</h5>
+    <h5>Precio: ${producto.precio}</h5>
+  </div>
+  <button type="button" class="btn btn-outline-danger" onclick="quitarProducto(${index})">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+  <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"></path>
+</svg>
+                Quitar
+              </button>
 </div>
+
 
     `;
     });
@@ -122,6 +262,36 @@
   <div id="modalContent"></div>
 </div>
 
+<div class="modal" id="modalpedido">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Contenido de la modal -->
+      <div class="modal-header">
+        <h4 class="modal-title">Formulario de Pedido</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Formulario -->
+        <form id="pedidoForm">
+          <label for="direccion">Dirección de entrega:</label>
+          <input type="text" id="direccion" name="direccion" required>
+          <br>
+
+          <label for="estado">Estado:</label>
+          <input type="text" id="estado" name="estado" required>
+          <br>
+
+          <!-- Otros campos del formulario según tus necesidades -->
+
+          <button type="button" onclick="enviarPedido()">Enviar Pedido</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
 <!-- Contenido específico de la página de inicio -->
 <div class="container">
   <div class="row justify-content-center">
